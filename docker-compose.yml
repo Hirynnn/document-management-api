@@ -5,10 +5,12 @@ services:
     image: postgres:16-alpine
     container_name: document-management-postgres
     restart: unless-stopped
+    env_file:
+      - .env
     environment:
-      POSTGRES_DB: document_management_api
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: ${POSTGRES_DB:-document_management_api}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
       - "5432:5432"
     volumes:
@@ -22,15 +24,17 @@ services:
     restart: unless-stopped
     depends_on:
       - postgres
+    env_file:
+      - .env
     ports:
       - "4000:4000"
     environment:
-      NODE_ENV: development
-      PORT: 4000
-      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/document_management_api?schema=public
-      JWT_SECRET: super_secret_document_api_2026
-      UPLOAD_DIR: uploads
-      MAX_FILE_SIZE: 5242880
+      NODE_ENV: ${NODE_ENV:-development}
+      PORT: ${PORT:-4000}
+      DATABASE_URL: ${DATABASE_URL}
+      JWT_SECRET: ${JWT_SECRET}
+      UPLOAD_DIR: ${UPLOAD_DIR:-uploads}
+      MAX_FILE_SIZE: ${MAX_FILE_SIZE:-5242880}
     volumes:
       - .:/app
       - /app/node_modules
