@@ -4,8 +4,14 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 async function main() {
-  const email = "admin@example.com";
-  const password = "[REDACTED_TEST_PASSWORD]";
+  const email = process.env.SEED_ADMIN_EMAIL;
+  const password = process.env.SEED_ADMIN_PASSWORD;
+
+  if (!email || !password) {
+    throw new Error(
+      "SEED_ADMIN_EMAIL and SEED_ADMIN_PASSWORD must be set to run the admin seed.",
+    );
+  }
 
   const existingAdmin = await prisma.user.findUnique({ where: { email } });
 
@@ -27,9 +33,6 @@ async function main() {
   });
 
   console.log(`✅ Admin created: ${admin.email}`);
-  console.log(
-    "⚠️ This temporary admin password is for development only and should be changed in production.",
-  );
 }
 
 main()

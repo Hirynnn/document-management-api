@@ -102,6 +102,8 @@ Crie um arquivo `.env` na raiz do projeto com as variáveis abaixo:
 ```env
 DATABASE_URL="postgresql://postgres:<SUA_SENHA>@localhost:5432/document_management_api?schema=public"
 JWT_SECRET="<SEGREDO_ALEATORIO_FORTE>"
+SEED_ADMIN_EMAIL="admin@example.com"
+SEED_ADMIN_PASSWORD="<SENHA_FORTE_E_UNICA>"
 PORT=4000
 UPLOAD_DIR="uploads"
 MAX_FILE_SIZE=5242880
@@ -211,13 +213,11 @@ npm run dev
 
 ## Seed do administrador
 
-O comando `npm run prisma:seed` cria automaticamente um usuário ADMIN para desenvolvimento:
+Configure `SEED_ADMIN_EMAIL` e `SEED_ADMIN_PASSWORD` no arquivo `.env` antes de executar
+`npm run prisma:seed` ou iniciar pelo Docker Compose. O seed cria um usuário ADMIN com
+essas credenciais apenas se ainda não existir um usuário com o email informado.
 
-- Nome: Administrador
-- Email: admin@example.com
-- Senha: [REDACTED_TEST_PASSWORD]
-
-> Essa senha é apenas para ambiente de desenvolvimento. Em produção, altere a senha antes de expor o sistema.
+Use uma senha forte e única; não reutilize credenciais de produção em desenvolvimento.
 
 ## Validação local
 
@@ -291,7 +291,7 @@ curl -X POST http://localhost:4000/api/auth/login \
   -H "Content-Type: application/json" \
   -d '{
     "email": "admin@example.com",
-    "password": "[REDACTED_TEST_PASSWORD]"
+    "password": "<SENHA_CONFIGURADA_NO_ENV>"
   }'
 ```
 

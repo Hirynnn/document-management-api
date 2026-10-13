@@ -2,6 +2,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { prisma } from "../lib/prisma";
 import { AppError } from "../middlewares/error.middleware";
+import { getJwtSecret } from "../utils/jwt-secret";
 
 export type SanitizedUser = {
   id: string;
@@ -78,14 +79,13 @@ export async function loginUser(input: { email: string; password: string }) {
     throw new AppError(401, "Credenciais inválidas");
   }
 
-  const secret = process.env.JWT_SECRET ?? "[REDACTED]";
   const token = jwt.sign(
     {
       sub: user.id,
       email: user.email,
       role: user.role,
     },
-    secret,
+    getJwtSecret(),
     { expiresIn: "7d" },
   );
 

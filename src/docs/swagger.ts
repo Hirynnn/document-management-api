@@ -37,7 +37,7 @@ const definition = {
         required: ["email", "password"],
         properties: {
           email: { type: "string", example: "admin@example.com" },
-          password: { type: "string", example: "[REDACTED_TEST_PASSWORD]" },
+          password: { type: "string", example: "senha-configurada-no-env" },
         },
       },
       UserResponse: {

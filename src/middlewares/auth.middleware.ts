@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import { AppError } from "./error.middleware";
+import { getJwtSecret } from "../utils/jwt-secret";
 
 export function requireAuth(req: Request, _res: Response, next: NextFunction) {
   const authHeader = req.headers.authorization;
@@ -10,7 +11,7 @@ export function requireAuth(req: Request, _res: Response, next: NextFunction) {
   }
 
   const token = authHeader.replace("Bearer ", "").trim();
-  const secret = process.env.JWT_SECRET ?? "[REDACTED]";
+  const secret = getJwtSecret();
 
   try {
     const payload = jwt.verify(token, secret) as {
